@@ -2,53 +2,49 @@
 
 #include <QAbstractTableModel>
 #include <qabstractitemmodel.h>
+#include "tablemodel.h"
+
 using std::vector;
 
 
-class TableModel : public QAbstractTableModel {
+QModelIndex TableModel::index(int row, int column, const QModelIndex &parent) const {
+    Q_UNUSED(parent);
+    return createIndex(row, column);
+}
 
-    vector<vector<QVariant>> dataList{{"Lion", "Tiger", "Bear"}};
+QModelIndex TableModel::parent(const QModelIndex &child) const {
+    Q_UNUSED(child);
+    return QModelIndex();
+}
 
-    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override {
-        Q_UNUSED(parent);
-        return createIndex(row, column);
-    }
+QVariant TableModel::data(const QModelIndex &index, int role) const {
+    if (role == Qt::DisplayRole)
+        return dataList[index.row()][index.column()];
+    return QVariant();
+}
 
-    QModelIndex parent(const QModelIndex &child) const override {
-        Q_UNUSED(child);
-        return QModelIndex();
-    }
+bool TableModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+    Q_UNUSED(role);
+    dataList[index.row()][index.column()] = value;
+    emit dataChanged(index, index);
+    return true;
+}
 
-    QVariant virtual data(const QModelIndex &index, int role = Qt::DisplayRole) const override {
-        if (role == Qt::DisplayRole)
-            return dataList[index.row()][index.column()];
-        return QVariant();
-    }
+int TableModel::rowCount(const QModelIndex &parent) const {
+    Q_UNUSED(parent);
+    return dataList.size();
+}
 
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override {
-        Q_UNUSED(role);
-        dataList[index.row()][index.column()] = value;
-        emit dataChanged(index, index);
-        return true;
-    }
+int TableModel::columnCount(const QModelIndex &parent) const {
+    Q_UNUSED(parent);
+    return 3;
+}
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override {
-        Q_UNUSED(parent);
-        return dataList.size();
-    }
+Qt::ItemFlags TableModel::flags(const QModelIndex &index) const {
+    Q_UNUSED(index);
+    return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+}
 
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override {
-        Q_UNUSED(parent);
-        return 3;
-    }
-
-    Qt::ItemFlags flags(const QModelIndex &index) const override {
-        Q_UNUSED(index);
-        return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
-    }
-
-    Qt::DropActions supportedDropActions() const override {
-        return Qt::CopyAction | Qt::MoveAction;
-    }
-
-};
+Qt::DropActions TableModel::supportedDropActions() const {
+    return Qt::CopyAction | Qt::MoveAction;
+}
