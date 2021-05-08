@@ -32,6 +32,11 @@ class TableModel : public QAbstractTableModel {
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     Qt::DropActions supportedDropActions() const override;
+
+    bool insertRows(int row, int count, const QModelIndex &parent) override;
+
+    bool removeRows(int row, int count, const QModelIndex &parent) override;
+
 };
 
 #endif // TABLEMODEL_H

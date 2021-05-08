@@ -48,3 +48,32 @@ Qt::ItemFlags TableModel::flags(const QModelIndex &index) const {
 Qt::DropActions TableModel::supportedDropActions() const {
     return Qt::CopyAction | Qt::MoveAction;
 }
+
+bool TableModel::insertRows(int row, int count, const QModelIndex &parent) {
+    if (count > 0) {
+        beginInsertRows(parent, row, row + count + 1);
+        for (int i = 0; i != count; i++)
+            dataList.emplace(dataList.begin() + row, columnCount());
+        endInsertRows();
+        emit dataChanged(index(row, 0), index(row + count - 1, columnCount()));
+        emit layoutChanged();
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool TableModel::removeRows(int row, int count, const QModelIndex &parent) {
+    if (count > 0) {
+        beginRemoveRows(parent, row, row + count + 1);
+        dataList.erase(dataList.begin() + row, dataList.begin() + row + count);
+        endRemoveRows();
+        emit dataChanged(index(row, 0), index(row + count - 1, columnCount()));
+        emit layoutChanged();
+        return true;
+    }
+    else {
+        return false;
+    }
+}
