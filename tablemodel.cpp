@@ -50,8 +50,8 @@ Qt::DropActions TableModel::supportedDropActions() const {
 }
 
 bool TableModel::insertRows(int row, int count, const QModelIndex &parent) {
-    if (count > 0) {
-        beginInsertRows(parent, row, row + count + 1);
+    if (row != -1 and count > 0) {
+        beginInsertRows(parent, row, row + count - 1);
         for (int i = 0; i != count; i++)
             dataList.emplace(dataList.begin() + row, columnCount());
         endInsertRows();
@@ -65,8 +65,8 @@ bool TableModel::insertRows(int row, int count, const QModelIndex &parent) {
 }
 
 bool TableModel::removeRows(int row, int count, const QModelIndex &parent) {
-    if (count > 0) {
-        beginRemoveRows(parent, row, row + count + 1);
+    if (row > 0 and count > 0) {
+        beginRemoveRows(parent, row, row + count - 1);
         dataList.erase(dataList.begin() + row, dataList.begin() + row + count);
         endRemoveRows();
         emit dataChanged(index(row, 0), index(row + count - 1, columnCount()));
