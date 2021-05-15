@@ -11,6 +11,13 @@ class TableModel : public QAbstractTableModel {
 
     Q_OBJECT
 
+public:
+
+    bool itemsAreDropEnabled = true;
+    bool moveActionEnabled = true;
+    bool copyActionEnabled = true;
+
+
     vector<vector<QVariant>> dataList{
         {"Lion", "Tiger", "Bear"},
         {"Gazelle", "Ox", "Pig"},
@@ -36,6 +43,9 @@ class TableModel : public QAbstractTableModel {
     bool insertRows(int row, int count, const QModelIndex &parent) override;
 
     bool removeRows(int row, int count, const QModelIndex &parent) override;
+
+    bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild) override;
+
 
 };
 
