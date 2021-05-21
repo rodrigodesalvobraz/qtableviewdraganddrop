@@ -104,4 +104,5 @@ bool TableModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int co
     else {
         return false;
     }
+
 }

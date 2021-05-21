@@ -15,7 +15,7 @@ public:
 
     bool itemsAreDropEnabled = true;
     bool moveActionEnabled = true;
-    bool copyActionEnabled = true;
+    bool copyActionEnabled = false;
 
 
     vector<vector<QVariant>> dataList{
@@ -45,7 +45,6 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent) override;
 
     bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild) override;
-
 
 };
 

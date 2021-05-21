@@ -15,6 +15,7 @@ SOURCES += \
 
 HEADERS += \
     mainwindow.h \
+    mytableview.h \
     tablemodel.h
 
 # Default rules for deployment.

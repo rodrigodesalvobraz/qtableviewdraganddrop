@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "tablemodel.h"
+#include "mytableview.h"
 
 #include <QCheckBox>
 #include <QVBoxLayout>
@@ -10,12 +11,14 @@
 using std::cout;
 using std::endl;
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setWindowTitle("Drag and Drop app");
 
-    tableView = new QTableView();
+//    tableView = new QTableView(this);
+    tableView = new MyTableView(this);
 
     model = new TableModel();
     tableView->setModel(model);
@@ -25,7 +28,8 @@ MainWindow::MainWindow(QWidget *parent)
     tableView->setDragEnabled(true);
     tableView->viewport()->setAcceptDrops(true);
     tableView->setDropIndicatorShown(true);
-    tableView->setDragDropMode(QAbstractItemView::DragDrop);
+    tableView->setDragDropMode(QAbstractItemView::InternalMove);
+//    tableView->setDragDropMode(QAbstractItemView::DragDrop); // same as far as I can tell
     tableView->setDragDropOverwriteMode(false);
 
     dragDropOverwriteModeCheckbox = new QCheckBox("DragDropOverwriteMode");
