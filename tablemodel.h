@@ -45,6 +45,7 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent) override;
 
     bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild) override;
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &index) override;
 
 };
 

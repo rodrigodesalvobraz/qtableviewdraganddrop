@@ -28,8 +28,8 @@ MainWindow::MainWindow(QWidget *parent)
     tableView->setDragEnabled(true);
     tableView->viewport()->setAcceptDrops(true);
     tableView->setDropIndicatorShown(true);
-    tableView->setDragDropMode(QAbstractItemView::InternalMove);
-//    tableView->setDragDropMode(QAbstractItemView::DragDrop); // same as far as I can tell
+//    tableView->setDragDropMode(QAbstractItemView::InternalMove);
+    tableView->setDragDropMode(QAbstractItemView::InternalMove); // same as far as I can tell
     tableView->setDragDropOverwriteMode(false);
 
     dragDropOverwriteModeCheckbox = new QCheckBox("DragDropOverwriteMode");
