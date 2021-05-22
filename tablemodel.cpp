@@ -106,3 +106,18 @@ bool TableModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int co
     }
 
 }
+
+
+bool TableModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &index)
+{
+   Q_UNUSED(column);
+   QModelIndex parent = index; // Fix for bool QAbstractItemViewPrivate::dropOn    case QAbstractItemView::OnItem:
+   if (parent.isValid())
+   {
+      row = parent.row();
+      parent = index.parent();
+   }
+   if (row == -1)
+      row = rowCount();
+   return QAbstractTableModel::dropMimeData(data, action, row, 0, parent);
+}
