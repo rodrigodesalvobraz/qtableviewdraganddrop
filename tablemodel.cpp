@@ -4,7 +4,10 @@
 #include <QFlags>
 #include <qabstractitemmodel.h>
 #include "tablemodel.h"
+#include <iostream>
 
+using std::cout;
+using std::endl;
 using std::vector;
 
 
@@ -108,16 +111,62 @@ bool TableModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int co
 }
 
 
-bool TableModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &index)
+bool TableModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
-   Q_UNUSED(column);
-   QModelIndex parent = index; // Fix for bool QAbstractItemViewPrivate::dropOn    case QAbstractItemView::OnItem:
-   if (parent.isValid())
-   {
-      row = parent.row();
-      parent = index.parent();
-   }
-   if (row == -1)
-      row = rowCount();
-   return QAbstractTableModel::dropMimeData(data, action, row, 0, parent);
+    Q_UNUSED(column)
+    QModelIndex newParent;
+    if (parent.isValid()) // row was dropped directly on an item (parent)
+    {
+        // Change behavior from overwriting destination row to inserting right after destination row.
+        // The item is inserted if the parent is invalid (the root hidden parent)
+        // and row contains the index on which to insert it.
+        newParent = QModelIndex();
+        row = parent.row() + 1;
+    }
+    else
+        newParent = parent;
+
+    if (row == -1)
+        row = rowCount();
+
+    return QAbstractTableModel::dropMimeData(data, action, row, 0, newParent);
 }
+
+// DEBUGGING VERSION
+
+//bool TableModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+//{
+//   cout << "action: " << action << endl;
+//   cout << "parent: " << parent.row() << endl;
+//   cout << "row: " << row << endl;
+
+//   bool manipulate = true;
+
+//   if (manipulate)
+//   {
+//       QModelIndex newParent;
+//       if (parent.isValid()) // row was dropped directly on an item (parent)
+//       {
+//          // Change behavior from overwriting destination row to inserting right after it.
+//          // The item is inserted if the parent is invalid (root parent, inexistent in table)
+//          // and row contains the index on which to insert it.
+//          newParent = QModelIndex();
+//          row = parent.row() + 1;
+//       }
+//       else
+//           newParent = parent;
+
+//       if (row == -1)
+//          row = rowCount();
+
+//       cout << "After manipulation: " << endl;
+//       cout << "parent: " << newParent.row() << endl;
+//       cout << "row: " << row << endl;
+
+//       return QAbstractTableModel::dropMimeData(data, action, row, 0, newParent);
+//   }
+//   else
+//   {
+//       return QAbstractTableModel::dropMimeData(data, action, row, column, parent);
+//   }
+//}

@@ -37,6 +37,8 @@ public:
        QTableView::reset();
 
        QObject::connect(model(), &QAbstractTableModel::rowsInserted, this, [this](const QModelIndex &parent, int first, int last) {
+           Q_UNUSED(parent)
+           Q_UNUSED(last)
            m_dropRow = first;
        });
     }
@@ -53,9 +55,14 @@ public:
        if (m_dropRow > dragRow)
           --m_dropRow;
 
-       QMetaObject::invokeMethod(this,
-                                 std::bind(&MyTableView::selectRow, this, m_dropRow),
-                                 Qt::QueuedConnection);  // Postpones selection
+       // The following code would take care of selecting the dropped row after the event.
+       // It works on Linux and Windows, but not on macOS for some reason.
+       // In the make it is not queue and has the same effect as selectRow(m_dropRow),
+       // which changes the selection and causes the drop to happen in the wrong place.
+
+//       QMetaObject::invokeMethod(this,
+//                                 std::bind(&MyTableView::selectRow, this, m_dropRow),
+//                                 Qt::QueuedConnection);  // Postpones selection
     }
 
 

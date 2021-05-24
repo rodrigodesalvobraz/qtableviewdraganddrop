@@ -11,13 +11,11 @@
 using std::cout;
 using std::endl;
 
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setWindowTitle("Drag and Drop app");
 
-//    tableView = new QTableView(this);
     tableView = new MyTableView(this);
 
     model = new TableModel();
@@ -29,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     tableView->viewport()->setAcceptDrops(true);
     tableView->setDropIndicatorShown(true);
 //    tableView->setDragDropMode(QAbstractItemView::InternalMove);
-    tableView->setDragDropMode(QAbstractItemView::InternalMove); // same as far as I can tell
+    tableView->setDragDropMode(QAbstractItemView::DragDrop); // same as far as I can tell
     tableView->setDragDropOverwriteMode(false);
 
     dragDropOverwriteModeCheckbox = new QCheckBox("DragDropOverwriteMode");
