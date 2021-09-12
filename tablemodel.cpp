@@ -117,9 +117,11 @@ bool TableModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int 
     QModelIndex newParent;
     if (parent.isValid()) // row was dropped directly on an item (parent)
     {
-        // Change behavior from overwriting destination row to inserting right after destination row.
-        // The item is inserted if the parent is invalid (the root hidden parent)
-        // and row contains the index on which to insert it.
+        // If we apply dropMimeData without any modifications,
+        // the data overwrites the given row.
+        // However, we would like to insert the data *after* the given row.
+        // The TableModel inserts a row if the parent is the hidden root parent
+        // (provided by QModelIndex()), so we use that.
         newParent = QModelIndex();
         row = parent.row() + 1;
     }
@@ -147,9 +149,11 @@ bool TableModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int 
 //       QModelIndex newParent;
 //       if (parent.isValid()) // row was dropped directly on an item (parent)
 //       {
-//          // Change behavior from overwriting destination row to inserting right after it.
-//          // The item is inserted if the parent is invalid (root parent, inexistent in table)
-//          // and row contains the index on which to insert it.
+//          //  If we apply dropMimeData without any modifications,
+//          //  the data overwrites the given row.
+//          //  However, we would like to insert the data *after* the given row.
+//          //  The TableModel inserts a row if the parent is the hidden root parent
+//          //  (provided by QModelIndex()), so we use that.
 //          newParent = QModelIndex();
 //          row = parent.row() + 1;
 //       }
